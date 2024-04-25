@@ -1,0 +1,9 @@
+.pnpm-debug.log*
+cache
+tsconfig.tsbuildinfo
+
+node_modules
+
+dist
+
+.DS_Store
