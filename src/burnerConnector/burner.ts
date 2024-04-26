@@ -1,5 +1,11 @@
 import { createConnector, normalizeChainId } from "@wagmi/core";
-import type { EIP1193RequestFn, Hex, Transport, WalletRpcSchema } from "viem";
+import type {
+  EIP1193RequestFn,
+  Hex,
+  SendTransactionParameters,
+  Transport,
+  WalletRpcSchema,
+} from "viem";
 import {
   BaseError,
   RpcRequestError,
@@ -12,7 +18,6 @@ import {
 } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 import { getHttpRpcClient, hexToBigInt, numberToHex } from "viem/utils";
-import type { SendTransactionParameters } from "viem/zksync";
 import { loadBurnerPK } from "../utils/index.js";
 
 export const burnerWalletId = "burnerWallet";
@@ -114,7 +119,7 @@ export const burner = () => {
       const burnerAddress = accounts.map((x) =>
         getAddress(x),
       )[0] as `0x${string}`;
-      return [burnerAddress] as const;
+      return [burnerAddress];
     },
     async onDisconnect() {
       config.emitter.emit("disconnect");

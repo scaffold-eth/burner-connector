@@ -25,7 +25,7 @@
     "typescript": "^5.4.5"
   },
   "dependencies": {
-    "@wagmi/core": "^2.6.19",
-    "viem": "^2.9.27"
+    "@wagmi/core": "2.6.9",
+    "viem": "2.8.16"
   }
 }
