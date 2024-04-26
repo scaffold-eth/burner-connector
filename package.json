@@ -11,6 +11,10 @@
     "!dist/**/*.tsbuildinfo",
     "!src/**"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/technophile-04/burner-connector.git"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "pnpm run clean && pnpm run build:esm+types",
