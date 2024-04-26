@@ -1,0 +1,7 @@
+- Get initial messy version working
+- Update name in package.json
+- Configure changeset flow
+- Configure eslint / prettier ? mayber biome
+- Talk about workspace with Carlos for future (tree shakeability) so that we export Rainbowkit and Family
+- Add LICENSE
+- Update the burnerWalletID and name
