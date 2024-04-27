@@ -14,7 +14,7 @@ const isValidPK = (pk: Hex | string | undefined | null): boolean => {
  * Save the current burner private key to local storage
  */
 export const saveBurnerPK = (privateKey: Hex): void => {
-  if (typeof window != "undefined" && window != null) {
+  if (typeof window !== "undefined" && window != null) {
     window?.localStorage?.setItem(burnerStorageKey, privateKey);
   }
 };
@@ -24,7 +24,7 @@ export const saveBurnerPK = (privateKey: Hex): void => {
  */
 export const loadBurnerPK = (): Hex => {
   let currentSk: Hex = "0x";
-  if (typeof window != "undefined" && window != null) {
+  if (typeof window !== "undefined" && window != null) {
     currentSk = (window?.localStorage
       ?.getItem?.(burnerStorageKey)
       ?.replaceAll('"', "") ?? "0x") as Hex;
@@ -32,10 +32,9 @@ export const loadBurnerPK = (): Hex => {
 
   if (!!currentSk && isValidPK(currentSk)) {
     return currentSk;
-  } else {
-    // If no burner is found in localstorage, we will generate a random private key
-    const newDefaultPrivateKey = generatePrivateKey();
-    saveBurnerPK(newDefaultPrivateKey);
-    return newDefaultPrivateKey;
   }
+  // If no burner is found in localstorage, we will generate a random private key
+  const newDefaultPrivateKey = generatePrivateKey();
+  saveBurnerPK(newDefaultPrivateKey);
+  return newDefaultPrivateKey;
 };

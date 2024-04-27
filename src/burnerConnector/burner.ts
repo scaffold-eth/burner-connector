@@ -7,6 +7,7 @@ import type {
   WalletRpcSchema,
 } from "viem";
 import {
+  http,
   BaseError,
   RpcRequestError,
   SwitchChainError,
@@ -14,7 +15,6 @@ import {
   custom,
   fromHex,
   getAddress,
-  http,
 } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 import { getHttpRpcClient, hexToBigInt, numberToHex } from "viem/utils";
