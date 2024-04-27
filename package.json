@@ -2,6 +2,7 @@
   "name": "burner-connector-test01",
   "version": "1.0.1",
   "description": "",
+  "packageManager": "pnpm@9.0.6",
   "type": "module",
   "main": "./dist/esm/index.js",
   "types": "./dist/types/index.d.ts",
