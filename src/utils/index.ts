@@ -1,7 +1,7 @@
 import type { Hex } from "viem";
 import { generatePrivateKey } from "viem/accounts";
 
-const burnerStorageKey = "scaffoldEth2.burnerWallet.sk";
+const burnerStorageKey = "burnerWallet.pk";
 
 /**
  * Checks if the private key is valid

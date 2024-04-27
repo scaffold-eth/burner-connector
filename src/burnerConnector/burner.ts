@@ -20,9 +20,6 @@ import { privateKeyToAccount } from "viem/accounts";
 import { getHttpRpcClient, hexToBigInt, numberToHex } from "viem/utils";
 import { loadBurnerPK } from "../utils/index.js";
 
-export const burnerWalletId = "burnerWallet";
-export const burnerWalletName = "Burner Wallet";
-
 export class ConnectorNotConnectedError extends BaseError {
   override name = "ConnectorNotConnectedError";
   constructor() {
@@ -45,8 +42,8 @@ export const burner = () => {
   let connected = true;
   let connectedChainId: number;
   return createConnector<Provider>((config) => ({
-    id: burnerWalletId,
-    name: burnerWalletName,
+    id: "burnerWallet",
+    name: "Burner Wallet",
     type: "burnerWallet",
     async connect({ chainId } = {}) {
       const provider = await this.getProvider();
