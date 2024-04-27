@@ -20,7 +20,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@master
 
-      - name: Use Node.js ${{ matrix.node }}
+      - name: Setup node env
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node }}
