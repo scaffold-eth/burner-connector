@@ -1,11 +1,5 @@
 import { createConnector, normalizeChainId } from "@wagmi/core";
-import type {
-  EIP1193RequestFn,
-  Hex,
-  SendTransactionParameters,
-  Transport,
-  WalletRpcSchema,
-} from "viem";
+import type { EIP1193RequestFn, Hex, SendTransactionParameters, Transport, WalletRpcSchema } from "viem";
 import {
   http,
   BaseError,
@@ -18,11 +12,7 @@ import {
 } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 import { getHttpRpcClient, hexToBigInt, numberToHex } from "viem/utils";
-import {
-  burnerWalletId,
-  burnerWalletName,
-  loadBurnerPK,
-} from "../utils/index.js";
+import { burnerWalletId, burnerWalletName, loadBurnerPK } from "../utils/index.js";
 
 export class ConnectorNotConnectedError extends BaseError {
   override name = "ConnectorNotConnectedError";
@@ -38,9 +28,7 @@ export class ChainNotConfiguredError extends BaseError {
   }
 }
 
-type Provider = ReturnType<
-  Transport<"custom", Record<any, any>, EIP1193RequestFn<WalletRpcSchema>>
->;
+type Provider = ReturnType<Transport<"custom", Record<any, any>, EIP1193RequestFn<WalletRpcSchema>>>;
 
 export const burner = () => {
   let connected = true;
@@ -63,8 +51,7 @@ export const burner = () => {
       return { accounts, chainId: currentChainId };
     },
     async getProvider({ chainId } = {}) {
-      const chain =
-        config.chains.find((x) => x.id === chainId) ?? config.chains[0];
+      const chain = config.chains.find((x) => x.id === chainId) ?? config.chains[0];
 
       const url = chain.rpcUrls.default.http[0];
       if (!url) throw new Error("No rpc url found for chain");
@@ -78,9 +65,7 @@ export const burner = () => {
       const request: EIP1193RequestFn = async ({ method, params }) => {
         if (method === "eth_sendTransaction") {
           const actualParams = (params as SendTransactionParameters[])[0];
-          const value = actualParams?.value
-            ? hexToBigInt(actualParams.value as unknown as Hex)
-            : undefined;
+          const value = actualParams?.value ? hexToBigInt(actualParams.value as unknown as Hex) : undefined;
           const hash = await client.sendTransaction({
             ...(params as SendTransactionParameters[])[0],
             value,
@@ -117,9 +102,7 @@ export const burner = () => {
       if (!connected) throw new ConnectorNotConnectedError();
       const provider = await this.getProvider();
       const accounts = await provider.request({ method: "eth_accounts" });
-      const burnerAddress = accounts.map((x) =>
-        getAddress(x),
-      )[0] as `0x${string}`;
+      const burnerAddress = accounts.map((x) => getAddress(x))[0] as `0x${string}`;
       return [burnerAddress];
     },
     async onDisconnect() {
