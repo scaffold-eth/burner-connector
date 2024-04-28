@@ -7,11 +7,7 @@
   "main": "./dist/esm/index.js",
   "types": "./dist/types/index.d.ts",
   "typings": "./dist/types/index.d.ts",
-  "files": [
-    "dist/**",
-    "!dist/**/*.tsbuildinfo",
-    "!src/**"
-  ],
+  "files": ["dist/**", "!dist/**/*.tsbuildinfo"],
   "repository": {
     "type": "git",
     "url": "https://github.com/technophile-04/burner-connector.git"
