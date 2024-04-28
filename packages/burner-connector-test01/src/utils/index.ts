@@ -27,9 +27,7 @@ export const saveBurnerPK = (privateKey: Hex): void => {
 export const loadBurnerPK = (): Hex => {
   let currentSk: Hex = "0x";
   if (typeof window !== "undefined" && window != null) {
-    currentSk = (window?.localStorage
-      ?.getItem?.(burnerStorageKey)
-      ?.replaceAll('"', "") ?? "0x") as Hex;
+    currentSk = (window?.localStorage?.getItem?.(burnerStorageKey)?.replaceAll('"', "") ?? "0x") as Hex;
   }
 
   if (!!currentSk && isValidPK(currentSk)) {
