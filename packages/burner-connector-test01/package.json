@@ -1,13 +1,17 @@
 {
   "name": "burner-connector-test01",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "",
   "packageManager": "pnpm@9.0.6",
   "type": "module",
   "main": "./dist/esm/index.js",
   "types": "./dist/types/index.d.ts",
   "typings": "./dist/types/index.d.ts",
-  "files": ["dist/**", "!dist/**/*.tsbuildinfo", "!src/**"],
+  "files": [
+    "dist/**",
+    "!dist/**/*.tsbuildinfo",
+    "!src/**"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/technophile-04/burner-connector.git"
