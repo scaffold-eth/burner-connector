@@ -30,6 +30,7 @@
     "typescript": "^5.4.5"
   },
   "dependencies": {
+    "@rainbow-me/rainbowkit": "2.0.2",
     "@wagmi/core": "2.6.9",
     "viem": "2.8.16"
   }

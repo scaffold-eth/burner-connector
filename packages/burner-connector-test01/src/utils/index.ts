@@ -2,6 +2,8 @@ import type { Hex } from "viem";
 import { generatePrivateKey } from "viem/accounts";
 
 const burnerStorageKey = "burnerWallet.pk";
+export const burnerWalletId = "burnerWallet" as const;
+export const burnerWalletName = "Burner Wallet" as const;
 
 /**
  * Checks if the private key is valid
