@@ -7,7 +7,11 @@
 		"clean": "pnpm --filter burner-connector-test01 clean",
 		"typecheck": "pnpm --filter burner-connector-test01 typecheck",
 		"lint": "pnpm --filter burner-connector-test01 lint",
-		"format": "pnpm --filter burner-connector-test01 format"
+		"format": "pnpm --filter burner-connector-test01 format",
+		"changeset:release": "pnpm --filter burner-connector-test01 changeset:release"
 	},
-	"license": "MIT"
+	"license": "MIT",
+	"devDependencies": {
+		"@changesets/cli": "^2.27.1"
+	}
 }
