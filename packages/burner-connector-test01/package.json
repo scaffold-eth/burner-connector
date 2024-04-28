@@ -7,7 +7,10 @@
   "main": "./dist/esm/index.js",
   "types": "./dist/types/index.d.ts",
   "typings": "./dist/types/index.d.ts",
-  "files": ["dist/**", "!dist/**/*.tsbuildinfo"],
+  "files": [
+    "dist/**",
+    "!dist/**/*.tsbuildinfo"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/technophile-04/burner-connector.git"
@@ -26,7 +29,6 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@biomejs/biome": "1.7.1",
     "typescript": "^5.4.5"
   },
   "dependencies": {
