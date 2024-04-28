@@ -1,5 +1,0 @@
-- Update name in package.json
-- Configure eslint / prettier ? maybe biome
-- Talk about workspace with Carlos for future (tree shakeability) so that we export Rainbowkit and Family
-- Add LICENSE
-- Update the burnerWalletID and name
