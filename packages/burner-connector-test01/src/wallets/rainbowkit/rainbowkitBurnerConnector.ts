@@ -1,6 +1,6 @@
 import type { WalletDetailsParams } from "@rainbow-me/rainbowkit";
-import type { EIP1193RequestFn, Transport, WalletRpcSchema } from "viem";
 import { createConnector } from "@wagmi/core";
+import type { EIP1193RequestFn, Transport, WalletRpcSchema } from "viem";
 import { burner } from "../../burnerConnector/burner.js";
 
 type Provider = ReturnType<
