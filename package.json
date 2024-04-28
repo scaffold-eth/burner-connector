@@ -8,7 +8,7 @@
 		"typecheck": "pnpm --filter burner-connector-test01 typecheck",
 		"lint": "pnpm --filter burner-connector-test01 lint",
 		"format": "pnpm --filter burner-connector-test01 format",
-		"changeset:release": "pnpm --filter burner-connector-test01 changeset:release"
+		"changeset:release": "pnpm run build && pnpm changeset publish"
 	},
 	"license": "MIT",
 	"devDependencies": {
