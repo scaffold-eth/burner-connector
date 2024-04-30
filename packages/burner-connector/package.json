@@ -13,7 +13,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/technophile-04/burner-connector.git"
+    "url": "git+https://github.com/scaffold-eth/burner-connector.git"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
