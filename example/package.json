@@ -16,7 +16,7 @@
     "next": "14.2.3",
     "viem": "2.8.16",
     "wagmi": "2.5.12",
-    "burner-connector": "workspace:*"
+    "@scaffold-eth/burner-connector": "workspace:../packages/burner-connector/"
   },
   "devDependencies": {
     "typescript": "^5",

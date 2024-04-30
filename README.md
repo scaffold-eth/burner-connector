@@ -13,21 +13,21 @@ Before you begin, you need to install the following tools:
 1. Install the dependencies:
 
 ```bash
-npm install burner-connector
+npm install @scaffold-eth/burner-connector
 
 or
 
-yarn add burner-connector
+yarn add @scaffold-eth/burner-connector
 
 or
 
-pnpm add burner-connector
+pnpm add @scaffold-eth/burner-connector
 ```
 
 2. Using wagmi `burner` connector :
 
 ```ts
-import { burner } from "burner-connector";
+import { burner } from "@scaffold-eth/burner-connector";
 import { mainnet, base } from "viem/chains";
 export const config = createConfig({
   chains: [mainnet, base],
@@ -44,7 +44,7 @@ export const config = createConfig({
 ```ts
 import { connectorsForWallets } from "@rainbow-me/rainbowkit";
 import { metaMaskWallet } from "@rainbow-me/rainbowkit/wallets";
-import { rainbowkitBurnerWallet } from "burner-connector";
+import { rainbowkitBurnerWallet } from "@scaffold-eth/burner-connector";
 import { mainnet, base } from "viem/chains";
 
 const wallets = [metaMaskWallet, rainbowkitBurnerWallet];

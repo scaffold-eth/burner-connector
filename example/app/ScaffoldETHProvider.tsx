@@ -9,7 +9,7 @@ import { mainnet, polygon, optimism, arbitrum, base } from "wagmi/chains";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { metaMaskWallet } from "@rainbow-me/rainbowkit/wallets";
 import { createClient, http } from "viem";
-import { rainbowkitBurnerWallet } from "burner-connector";
+import { rainbowkitBurnerWallet } from "@scaffold-eth/burner-connector";
 
 const wallets = [metaMaskWallet, rainbowkitBurnerWallet];
 const walletConnectProjectID = "3a8170812b534d0ff9d794f19a901d64";

@@ -1,6 +1,6 @@
 {
-  "name": "burner-connector",
-  "version": "0.0.3",
+  "name": "@scaffold-eth/burner-connector",
+  "version": "0.0.0",
   "description": "",
   "packageManager": "pnpm@9.0.6",
   "type": "module",
