@@ -45,6 +45,19 @@ import { rainbowkitBurnerWallet } from "burner-connector";
 
 const wallets = [metaMaskWallet, rainbowkitBurnerWallet];
 
+const wagmiConnectors = connectorsForWallets(
+  [
+    {
+      groupName: "Supported Wallets",
+      wallets,
+    },
+  ],
+  {
+    appName: "scaffold-eth-2",
+    projectId: "YOUR_WALLET_CONNECT_PROJECT_ID",
+  },
+);
+
 const wagmiConfig = createConfig({
   chains: [mainnet, base],
   connectors: wagmiConnectors,
