@@ -1,18 +1,18 @@
 {
-	"private": true,
-	"type": "module",
-	"scripts": {
-		"build": "pnpm --filter burner-connector-test01 build",
-		"build:esm+types": "pnpm --filter burner-connector-test01 build:esm+types",
-		"clean": "pnpm --filter burner-connector-test01 clean",
-		"typecheck": "pnpm --filter burner-connector-test01 typecheck",
-		"lint": "pnpm --filter burner-connector-test01 lint",
-		"format": "pnpm --filter burner-connector-test01 format",
-		"changeset:release": "pnpm run build && pnpm changeset publish",
-		"dev": "pnpm --filter example dev"
-	},
-	"license": "MIT",
-	"devDependencies": {
-		"@changesets/cli": "^2.27.1"
-	}
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "pnpm --filter burner-connector build",
+    "build:esm+types": "pnpm --filter burner-connector build:esm+types",
+    "clean": "pnpm --filter burner-connector clean",
+    "typecheck": "pnpm --filter burner-connector typecheck",
+    "lint": "pnpm --filter burner-connector lint",
+    "format": "pnpm --filter burner-connector format",
+    "changeset:release": "pnpm run build && pnpm changeset publish",
+    "dev": "pnpm --filter example dev"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@changesets/cli": "^2.27.1"
+  }
 }

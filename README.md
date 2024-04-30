@@ -13,21 +13,21 @@ Before you begin, you need to install the following tools:
 1. Install the dependencies:
 
 ```bash
-npm install burner-connector-test01
+npm install burner-connector
 
 or
 
-yarn add burner-connector-test01
+yarn add burner-connector
 
 or
 
-pnpm add burner-connector-test01
+pnpm add burner-connector
 ```
 
 2. Using wagmi `burner` connector :
 
 ```ts
-import { burner } from "burner-connector-test01";
+import { burner } from "burner-connector";
 export const config = createConfig({
   chains: [mainnet, base],
   connectors: [burner()],
@@ -41,7 +41,7 @@ export const config = createConfig({
 3. Integrate with rainbowkit:
 
 ```ts
-import { rainbowkitBurnerWallet } from "burner-connector-test01";
+import { rainbowkitBurnerWallet } from "burner-connector";
 
 const wallets = [metaMaskWallet, rainbowkitBurnerWallet];
 
