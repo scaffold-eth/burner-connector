@@ -28,6 +28,7 @@ pnpm add burner-connector
 
 ```ts
 import { burner } from "burner-connector";
+import { mainnet, base } from "viem/chains";
 export const config = createConfig({
   chains: [mainnet, base],
   connectors: [burner()],
@@ -41,7 +42,10 @@ export const config = createConfig({
 3. Integrate with rainbowkit:
 
 ```ts
+import { connectorsForWallets } from "@rainbow-me/rainbowkit";
+import { metaMaskWallet } from "@rainbow-me/rainbowkit/wallets";
 import { rainbowkitBurnerWallet } from "burner-connector";
+import { mainnet, base } from "viem/chains";
 
 const wallets = [metaMaskWallet, rainbowkitBurnerWallet];
 
