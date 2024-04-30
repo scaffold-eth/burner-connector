@@ -1,5 +1,11 @@
 # burner-connector
 
+## 0.0.3
+
+### Patch Changes
+
+- 05740ad: fix readme example
+
 ## 0.0.2
 
 ### Patch Changes
