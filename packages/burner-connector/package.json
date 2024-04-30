@@ -25,7 +25,14 @@
     "format": "prettier --write . '!(node_modules|dist)/**/*' '!CHANGELOG.md'",
     "changeset:release": "pnpm run build && pnpm changeset publish"
   },
-  "keywords": [],
+  "keywords": [
+    "wagmi",
+    "viem",
+    "rainbowkit",
+    "wagmi connector",
+    "burner wallet",
+    "ethereum"
+  ],
   "author": "",
   "license": "MIT",
   "devDependencies": {
