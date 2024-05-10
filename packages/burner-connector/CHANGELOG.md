@@ -1,5 +1,11 @@
 # burner-connector
 
+## 0.0.5
+
+### Patch Changes
+
+- 5d6e5ee: Allow signing of message
+
 ## 0.0.4
 
 ### Patch Changes
