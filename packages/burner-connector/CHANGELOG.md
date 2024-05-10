@@ -1,5 +1,11 @@
 # burner-connector
 
+## 0.0.4
+
+### Patch Changes
+
+- b2edbad: New repo
+
 ## 0.0.3
 
 ### Patch Changes
