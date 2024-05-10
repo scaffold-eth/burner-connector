@@ -73,6 +73,17 @@ export const burner = () => {
           return hash;
         }
 
+        if (method === "personal_sign") {
+          // first param is Hex data representation of message,
+          // second param is address of the signer
+          const rawMessage = (params as [`0x${string}`, `0x${string}`])[0];
+          const signature = await client.signMessage({
+            account: burnerAccount,
+            message: { raw: rawMessage },
+          });
+          return signature;
+        }
+
         if (method === "eth_accounts") {
           return [burnerAccount.address];
         }
