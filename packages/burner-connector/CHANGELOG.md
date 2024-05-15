@@ -1,5 +1,11 @@
 # burner-connector
 
+## 0.0.6
+
+### Patch Changes
+
+- f917ed6: fix: format transaction properties before sending
+
 ## 0.0.5
 
 ### Patch Changes
