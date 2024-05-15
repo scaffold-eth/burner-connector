@@ -5,7 +5,14 @@ import {
   RainbowKitProvider,
 } from "@rainbow-me/rainbowkit";
 import { createConfig, WagmiProvider } from "wagmi";
-import { mainnet, polygon, optimism, arbitrum, base } from "wagmi/chains";
+import {
+  mainnet,
+  polygon,
+  optimism,
+  arbitrum,
+  base,
+  hardhat,
+} from "wagmi/chains";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { metaMaskWallet } from "@rainbow-me/rainbowkit/wallets";
 import { createClient, http } from "viem";
@@ -27,7 +34,7 @@ const wagmiConnectors = connectorsForWallets(
   },
 );
 
-const chains = [mainnet, polygon, optimism, arbitrum, base] as const;
+const chains = [hardhat] as const;
 
 const wagmiConfig = createConfig({
   chains: chains,
