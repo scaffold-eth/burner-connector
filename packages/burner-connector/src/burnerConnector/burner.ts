@@ -11,7 +11,7 @@ import {
   getAddress,
 } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
-import { getHttpRpcClient, hexToBigInt, numberToHex } from "viem/utils";
+import { getHttpRpcClient, hexToBigInt, hexToNumber, numberToHex } from "viem/utils";
 import { burnerWalletId, burnerWalletName, loadBurnerPK } from "../utils/index.js";
 
 export class ConnectorNotConnectedError extends BaseError {
@@ -65,10 +65,22 @@ export const burner = () => {
       const request: EIP1193RequestFn = async ({ method, params }) => {
         if (method === "eth_sendTransaction") {
           const actualParams = (params as SendTransactionParameters[])[0];
-          const value = actualParams?.value ? hexToBigInt(actualParams.value as unknown as Hex) : undefined;
           const hash = await client.sendTransaction({
-            ...(params as SendTransactionParameters[])[0],
-            value,
+            account: burnerAccount,
+            data: actualParams?.data,
+            to: actualParams?.to,
+            value: actualParams?.value ? hexToBigInt(actualParams.value as unknown as Hex) : undefined,
+            gas: actualParams?.gas ? hexToBigInt(actualParams.gas as unknown as Hex) : undefined,
+            nonce: actualParams?.nonce ? hexToNumber(actualParams.nonce as unknown as Hex) : undefined,
+            maxPriorityFeePerGas: actualParams?.maxPriorityFeePerGas
+              ? hexToBigInt(actualParams.maxPriorityFeePerGas as unknown as Hex)
+              : undefined,
+            maxFeePerGas: actualParams?.maxFeePerGas
+              ? hexToBigInt(actualParams.maxFeePerGas as unknown as Hex)
+              : undefined,
+            gasPrice: (actualParams?.gasPrice
+              ? hexToBigInt(actualParams.gasPrice as unknown as Hex)
+              : undefined) as undefined,
           });
           return hash;
         }
