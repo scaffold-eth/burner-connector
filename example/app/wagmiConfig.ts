@@ -21,7 +21,7 @@ const wagmiConnectors = connectorsForWallets(
   },
 );
 
-export const chains = [hardhat, sepolia] as const;
+export const chains = [sepolia, hardhat] as const;
 
 export const wagmiConfig = createConfig({
   chains: chains,
