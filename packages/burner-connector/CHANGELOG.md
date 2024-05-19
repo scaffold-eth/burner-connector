@@ -1,5 +1,11 @@
 # burner-connector
 
+## 0.0.7
+
+### Patch Changes
+
+- 549f717: update wagmi, viem & rainbowkit versions
+
 ## 0.0.6
 
 ### Patch Changes
