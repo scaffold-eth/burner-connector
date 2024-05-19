@@ -73,18 +73,6 @@ const wagmiConfig = createConfig({
 });
 ```
 
-## Local setup
+---
 
-1. Build the package:
-
-```bash
-pnpm run build
-```
-
-2. Start the example repo:
-
-```bash
-pnpm run dev
-```
-
-This will start a local server on `http://localhost:3000` with the example app linked to local package
+Checkout [CONTRIBUTING.md](/CONTRIBUTING.md) for more details on how to set it up locally.
