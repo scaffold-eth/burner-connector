@@ -1,4 +1,4 @@
-import { createConnector, normalizeChainId } from "@wagmi/core";
+import { createConnector, normalizeChainId, type SignTypedDataParameters } from "@wagmi/core";
 import type { EIP1193RequestFn, Hex, SendTransactionParameters, Transport, WalletRpcSchema } from "viem";
 import {
   http,
@@ -100,7 +100,7 @@ export const burner = () => {
           // first param is address of the signer
           // second param is stringified typed data
           const stringifiedData = (params as [`0x${string}`, string])[1];
-          const signature = await client.signTypedData(JSON.parse(stringifiedData));
+          const signature = await client.signTypedData(JSON.parse(stringifiedData) as SignTypedDataParameters);
 
           return signature;
         }
