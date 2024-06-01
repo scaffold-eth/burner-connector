@@ -1,5 +1,11 @@
 # burner-connector
 
+## 0.0.8
+
+### Patch Changes
+
+- 4150e8c: Adds possibility to sign typed data
+
 ## 0.0.7
 
 ### Patch Changes
