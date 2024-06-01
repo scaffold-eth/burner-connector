@@ -96,6 +96,15 @@ export const burner = () => {
           return signature;
         }
 
+        if (method === "eth_signTypedData_v4") {
+          // first param is address of the signer
+          // second param is stringified typed data
+          const stringifiedData = (params as [`0x${string}`, string])[1];
+          const signature = await client.signTypedData(JSON.parse(stringifiedData));
+
+          return signature;
+        }
+
         if (method === "eth_accounts") {
           return [burnerAccount.address];
         }
