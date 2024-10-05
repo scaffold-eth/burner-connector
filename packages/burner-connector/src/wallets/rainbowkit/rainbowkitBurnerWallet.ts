@@ -45,9 +45,14 @@ class BurnerWallet extends Function implements Wallet {
   }
 }
 
+type BurnerWalletConnector = {
+  (): Wallet;
+  (burnerConfig?: BurnerConnectorConfig): () => Wallet;
+}
+
 /**
  * Wagmi config for burner wallet
  */
-export const rainbowkitBurnerWallet = (burnerConfig?: BurnerConnectorConfig) => {
-  return new BurnerWallet(burnerConfig);
+export const rainbowkitBurnerWallet: BurnerWalletConnector = (burnerConfig?: BurnerConnectorConfig) => {
+  return new BurnerWallet(burnerConfig) as any; // unfortunately, typescript doesn't know that BurnerWallet is callable
 };
