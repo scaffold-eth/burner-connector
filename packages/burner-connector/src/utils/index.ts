@@ -1,9 +1,8 @@
 import type { Hex } from "viem";
 import { generatePrivateKey } from "viem/accounts";
 
-const burnerStorageKey = "burnerWallet.pk";
-export const burnerWalletId = "burnerWallet" as const;
-export const burnerWalletName = "Burner Wallet" as const;
+export const defaultBurnerId = "burnerWallet" as const;
+export const defaultBurnerName = "Burner Wallet" as const;
 
 /**
  * Checks if the private key is valid
@@ -15,19 +14,19 @@ const isValidPK = (pk: Hex | string | undefined | null): boolean => {
 /**
  * Save the current burner private key to local storage
  */
-export const saveBurnerPK = (privateKey: Hex): void => {
+export const saveBurnerPK = (privateKey: Hex, storageKey: string): void => {
   if (typeof window !== "undefined" && window != null) {
-    window?.localStorage?.setItem(burnerStorageKey, privateKey);
+    window?.localStorage?.setItem(storageKey, privateKey);
   }
 };
 
 /**
  * Gets the current burner private key from local storage
  */
-export const loadBurnerPK = (): Hex => {
+export const loadBurnerPK = (storageKey: string): Hex => {
   let currentSk: Hex = "0x";
   if (typeof window !== "undefined" && window != null) {
-    currentSk = (window?.localStorage?.getItem?.(burnerStorageKey)?.replaceAll('"', "") ?? "0x") as Hex;
+    currentSk = (window?.localStorage?.getItem?.(storageKey)?.replaceAll('"', "") ?? "0x") as Hex;
   }
 
   if (!!currentSk && isValidPK(currentSk)) {
@@ -35,6 +34,6 @@ export const loadBurnerPK = (): Hex => {
   }
   // If no burner is found in localstorage, we will generate a random private key
   const newDefaultPrivateKey = generatePrivateKey();
-  saveBurnerPK(newDefaultPrivateKey);
+  saveBurnerPK(newDefaultPrivateKey, storageKey);
   return newDefaultPrivateKey;
 };
