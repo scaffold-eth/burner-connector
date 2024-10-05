@@ -12,7 +12,7 @@ import {
 } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 import { getHttpRpcClient, hexToBigInt, hexToNumber, numberToHex } from "viem/utils";
-import { burnerWalletId, burnerWalletName, loadBurnerPK } from "../utils/index.js";
+import { defaultBurnerId, defaultBurnerName, loadBurnerPK } from "../utils/index.js";
 
 export class ConnectorNotConnectedError extends BaseError {
   override name = "ConnectorNotConnectedError";
@@ -30,13 +30,23 @@ export class ChainNotConfiguredError extends BaseError {
 
 type Provider = ReturnType<Transport<"custom", Record<any, any>, EIP1193RequestFn<WalletRpcSchema>>>;
 
-export const burner = () => {
+export type BurnerConnectorConfig = {
+  id?: string;
+  name?: string;
+  storageKey?: string;
+};
+
+const defaultBurnerStorageKey = "burnerWallet.pk";
+
+export const burner = (burnerConfig: BurnerConnectorConfig = {}) => {
   let connected = true;
   let connectedChainId: number;
+
+  const storageKey = burnerConfig.storageKey ?? burnerConfig.id + ".pk" ?? defaultBurnerStorageKey;
   return createConnector<Provider>((config) => ({
-    id: burnerWalletId,
-    name: burnerWalletName,
-    type: burnerWalletId,
+    id: burnerConfig.id ?? defaultBurnerId,
+    name: burnerConfig.name ?? defaultBurnerName,
+    type: burnerConfig.id ?? defaultBurnerId,
     async connect({ chainId } = {}) {
       const provider = await this.getProvider();
       const accounts = await provider.request({
@@ -55,7 +65,7 @@ export const burner = () => {
 
       const url = chain.rpcUrls.default.http[0];
       if (!url) throw new Error("No rpc url found for chain");
-      const burnerAccount = privateKeyToAccount(loadBurnerPK());
+      const burnerAccount = privateKeyToAccount(loadBurnerPK(burnerConfig.storageKey ?? storageKey));
       const client = createWalletClient({
         chain: chain,
         account: burnerAccount,
