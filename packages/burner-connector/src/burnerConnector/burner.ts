@@ -30,7 +30,7 @@ export class ChainNotConfiguredError extends BaseError {
 
 type Provider = ReturnType<Transport<"custom", Record<any, any>, EIP1193RequestFn<WalletRpcSchema>>>;
 
-export const burner = () => {
+export const burner = ({ useSessionStorage = false }: { useSessionStorage?: boolean } = {}) => {
   let connected = true;
   let connectedChainId: number;
   return createConnector<Provider>((config) => ({
@@ -55,7 +55,7 @@ export const burner = () => {
 
       const url = chain.rpcUrls.default.http[0];
       if (!url) throw new Error("No rpc url found for chain");
-      const burnerAccount = privateKeyToAccount(loadBurnerPK());
+      const burnerAccount = privateKeyToAccount(loadBurnerPK({ useSessionStorage }));
       const client = createWalletClient({
         chain: chain,
         account: burnerAccount,

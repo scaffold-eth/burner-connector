@@ -1,1 +1,1 @@
-export { rainbowkitBurnerWallet } from "./rainbowkitBurnerWallet.js";
+export { rainbowkitBurnerWallet, rainbowkitSessionStorageBurnerWallet } from "./rainbowkitBurnerWallet.js";
