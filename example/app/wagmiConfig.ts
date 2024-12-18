@@ -6,7 +6,7 @@ import { createClient, http } from "viem";
 import { rainbowkitBurnerWallet } from "burner-connector";
 
 // Use this if you want to enable session storage
-// rainbowkitBurnerWallet.useSessionStorage = false;
+// rainbowkitBurnerWallet.useSessionStorage = true;
 
 const wallets = [metaMaskWallet, rainbowkitBurnerWallet];
 const walletConnectProjectID = "3a8170812b534d0ff9d794f19a901d64";
@@ -21,7 +21,7 @@ const wagmiConnectors = connectorsForWallets(
   {
     appName: "scaffold-eth-2",
     projectId: walletConnectProjectID,
-  },
+  }
 );
 
 export const chains = [optimismSepolia, hardhat] as const;

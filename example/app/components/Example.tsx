@@ -17,8 +17,9 @@ export const Example = () => {
   console.log("isPending", isPending);
   const yourContract =
     chain?.id && chain.id in deployedContracts
-      ? deployedContracts[chain.id as 11155111 | 31337].YourContract
-      : deployedContracts["11155111"].YourContract;
+      ? deployedContracts[chain.id as keyof typeof deployedContracts]
+          .YourContract
+      : deployedContracts[11155420].YourContract;
 
   const { data: totalCounter } = useReadContract({
     ...yourContract,
