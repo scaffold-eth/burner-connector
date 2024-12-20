@@ -16,7 +16,7 @@ pnpm run dev
 
 This will start a local server on `http://localhost:3000` with the example app linked to local package
 
-The burner wallet should be automatically connected to sepolia network, and can interact with the [`YourContract`](https://sepolia.etherscan.io/address/0x0D25b202D1B5126ECFcaeFa85f7a37ed86EF79ea) deployed on the sepolia.
+The burner wallet should be automatically connected to optimism sepolia network, and can interact with the [`YourContract`](https://optimism-sepolia.blockscout.com/address/0xFB30C0790128b97e3aC540E6124e512E37c47D00).
 
 ## Testing with hardhat
 

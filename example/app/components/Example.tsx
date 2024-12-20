@@ -7,6 +7,7 @@ import {
 import { FaucetButton } from "./FaucetButton";
 import toast from "react-hot-toast";
 import deployedContracts from "../contracts/deployedContracts";
+import { optimismSepolia } from "viem/chains";
 
 export const Example = () => {
   const { isConnected, chain } = useAccount();
@@ -19,7 +20,7 @@ export const Example = () => {
     chain?.id && chain.id in deployedContracts
       ? deployedContracts[chain.id as keyof typeof deployedContracts]
           .YourContract
-      : deployedContracts[11155420].YourContract;
+      : deployedContracts[optimismSepolia.id].YourContract;
 
   const { data: totalCounter } = useReadContract({
     ...yourContract,
