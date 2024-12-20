@@ -29,6 +29,11 @@ pnpm add burner-connector
 ```ts
 import { burner } from "burner-connector";
 import { mainnet, base } from "viem/chains";
+
+// burner function can also called with param `{ useSessionStorage: true }` to create a new wallet for each browser tab
+// - `useSessionStorage` to false (default) to persist wallet across browser tabs(incognito window will have different wallet)
+// - `useSessionStorage` to true to create a new wallet for each browser tab
+
 export const config = createConfig({
   chains: [mainnet, base],
   connectors: [burner()],
@@ -46,6 +51,13 @@ import { connectorsForWallets } from "@rainbow-me/rainbowkit";
 import { metaMaskWallet } from "@rainbow-me/rainbowkit/wallets";
 import { rainbowkitBurnerWallet } from "burner-connector";
 import { mainnet, base } from "viem/chains";
+
+const wallets = [metaMaskWallet, rainbowkitBurnerWallet];
+
+// Configure burner wallet storage
+// - `useSessionStorage` to false (default) to persist wallet across browser tabs(incognito window will have different wallet)
+// - `useSessionStorage` to true to create a new wallet for each browser tab
+// rainbowkitBurnerWallet.useSessionStorage = true;
 
 const wallets = [metaMaskWallet, rainbowkitBurnerWallet];
 

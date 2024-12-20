@@ -11,3 +11,10 @@ export const rainbowkitBurnerConnector = (walletDetails: WalletDetailsParams) =>
     ...walletDetails,
   }));
 };
+
+export const rainbowkitSessionStorageBurnerConnector = (walletDetails: WalletDetailsParams) => {
+  return createConnector<Provider>((config) => ({
+    ...burner({ useSessionStorage: true })(config),
+    ...walletDetails,
+  }));
+};
