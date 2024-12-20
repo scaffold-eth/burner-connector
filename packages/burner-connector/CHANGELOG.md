@@ -1,5 +1,11 @@
 # burner-connector
 
+## 0.0.9
+
+### Patch Changes
+
+- 1849aec: feat: sessionStorage for burner wallet
+
 ## 0.0.8
 
 ### Patch Changes
