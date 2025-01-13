@@ -24,19 +24,39 @@ or
 pnpm add burner-connector
 ```
 
-2. Using wagmi `burner` connector :
+2. Using wagmi `burner` connector:
 
 ```ts
 import { burner } from "burner-connector";
 import { mainnet, base } from "viem/chains";
 
-// burner function can also called with param `{ useSessionStorage: true }` to create a new wallet for each browser tab
-// - `useSessionStorage` to false (default) to persist wallet across browser tabs(incognito window will have different wallet)
-// - `useSessionStorage` to true to create a new wallet for each browser tab
+// Configuration options:
+// - `useSessionStorage`: false (default) to persist wallet across browser tabs
+//                       true to create a new wallet for each browser tab
+// - `rpcUrls`: Optional custom RPC URLs for specific chain IDs
 
+// Basic usage without options
 export const config = createConfig({
   chains: [mainnet, base],
   connectors: [burner()],
+  transports: {
+    [mainnet.id]: http(),
+    [base.id]: http(),
+  },
+});
+
+// Example with all options
+export const config = createConfig({
+  chains: [mainnet, base],
+  connectors: [
+    burner({
+      useSessionStorage: true,
+      rpcUrls: {
+        1: "https://eth-mainnet.g.alchemy.com/v2/YOUR_API_KEY",
+        8453: "https://base-mainnet.g.alchemy.com/v2/YOUR_API_KEY",
+      },
+    }),
+  ],
   transports: {
     [mainnet.id]: http(),
     [base.id]: http(),
@@ -52,12 +72,17 @@ import { metaMaskWallet } from "@rainbow-me/rainbowkit/wallets";
 import { rainbowkitBurnerWallet } from "burner-connector";
 import { mainnet, base } from "viem/chains";
 
-const wallets = [metaMaskWallet, rainbowkitBurnerWallet];
+// Configure burner wallet options
+// Storage configuration:
+// - useSessionStorage: false (default) to persist wallet across browser tabs
+//                     true to create a new wallet for each browser tab
+rainbowkitBurnerWallet.useSessionStorage = true;
 
-// Configure burner wallet storage
-// - `useSessionStorage` to false (default) to persist wallet across browser tabs(incognito window will have different wallet)
-// - `useSessionStorage` to true to create a new wallet for each browser tab
-// rainbowkitBurnerWallet.useSessionStorage = true;
+// Custom RPC URLs configuration (optional):
+rainbowkitBurnerWallet.rpcUrls = {
+  1: "https://eth-mainnet.g.alchemy.com/v2/YOUR_API_KEY",
+  8453: "https://base-mainnet.g.alchemy.com/v2/YOUR_API_KEY",
+};
 
 const wallets = [metaMaskWallet, rainbowkitBurnerWallet];
 
@@ -84,6 +109,15 @@ const wagmiConfig = createConfig({
   },
 });
 ```
+
+## Configuration Options
+
+### Burner Connector Options
+
+| Option              | Type                     | Default | Description                                                                                     |
+| ------------------- | ------------------------ | ------- | ----------------------------------------------------------------------------------------------- |
+| `useSessionStorage` | `boolean`                | `false` | When true, creates a new wallet for each browser tab. When false, persists wallet across tabs.  |
+| `rpcUrls`           | `Record<number, string>` | `{}`    | Optional custom RPC URLs for specific chain IDs. Falls back to chain's default if not provided. |
 
 ---
 
