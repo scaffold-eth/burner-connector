@@ -5,16 +5,22 @@ import { burner } from "../../burnerConnector/burner.js";
 
 type Provider = ReturnType<Transport<"custom", Record<any, any>, EIP1193RequestFn<WalletRpcSchema>>>;
 
-export const rainbowkitBurnerConnector = (walletDetails: WalletDetailsParams) => {
+export const rainbowkitBurnerConnector = (
+  walletDetails: WalletDetailsParams,
+  burnerWalletConfig: { rpcUrls?: Record<number, string> },
+) => {
   return createConnector<Provider>((config) => ({
-    ...burner()(config),
+    ...burner({ rpcUrls: burnerWalletConfig?.rpcUrls })(config),
     ...walletDetails,
   }));
 };
 
-export const rainbowkitSessionStorageBurnerConnector = (walletDetails: WalletDetailsParams) => {
+export const rainbowkitSessionStorageBurnerConnector = (
+  walletDetails: WalletDetailsParams,
+  burnerWalletConfig: { rpcUrls?: Record<number, string> },
+) => {
   return createConnector<Provider>((config) => ({
-    ...burner({ useSessionStorage: true })(config),
+    ...burner({ useSessionStorage: true, rpcUrls: burnerWalletConfig?.rpcUrls })(config),
     ...walletDetails,
   }));
 };

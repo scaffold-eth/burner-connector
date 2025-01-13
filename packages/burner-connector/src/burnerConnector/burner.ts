@@ -30,7 +30,12 @@ export class ChainNotConfiguredError extends BaseError {
 
 type Provider = ReturnType<Transport<"custom", Record<any, any>, EIP1193RequestFn<WalletRpcSchema>>>;
 
-export const burner = ({ useSessionStorage = false }: { useSessionStorage?: boolean } = {}) => {
+type BurnerConfig = {
+  useSessionStorage?: boolean;
+  rpcUrls?: Record<number, string>;
+};
+
+export const burner = ({ useSessionStorage = false, rpcUrls = {} }: BurnerConfig = {}) => {
   let connected = true;
   let connectedChainId: number;
   return createConnector<Provider>((config) => ({
@@ -53,13 +58,16 @@ export const burner = ({ useSessionStorage = false }: { useSessionStorage?: bool
     async getProvider({ chainId } = {}) {
       const chain = config.chains.find((x) => x.id === chainId) ?? config.chains[0];
 
-      const url = chain.rpcUrls.default.http[0];
+      // Use custom RPC URL if provided, otherwise fallback to default
+      const url = rpcUrls[chain.id] || chain.rpcUrls.default.http[0];
       if (!url) throw new Error("No rpc url found for chain");
+
+      console.log("using the url ", url);
       const burnerAccount = privateKeyToAccount(loadBurnerPK({ useSessionStorage }));
       const client = createWalletClient({
         chain: chain,
         account: burnerAccount,
-        transport: http(),
+        transport: http(url),
       });
 
       const request: EIP1193RequestFn = async ({ method, params }) => {

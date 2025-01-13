@@ -8,6 +8,11 @@ import { rainbowkitBurnerWallet } from "burner-connector";
 // Use this if you want to enable session storage
 // rainbowkitBurnerWallet.useSessionStorage = true;
 
+/* Use custom RPC URLs to override wagmi's default RPC URLs if needed */
+/* rainbowkitBurnerWallet.rpcUrls = {
+  [optimismSepolia.id]: `https://opt-sepolia.g.alchemy.com/v2/${alchemyAPIKey}`,
+}; */
+
 const wallets = [metaMaskWallet, rainbowkitBurnerWallet];
 const walletConnectProjectID = "3a8170812b534d0ff9d794f19a901d64";
 const wagmiConnectors = connectorsForWallets(
@@ -21,7 +26,7 @@ const wagmiConnectors = connectorsForWallets(
   {
     appName: "scaffold-eth-2",
     projectId: walletConnectProjectID,
-  }
+  },
 );
 
 export const chains = [optimismSepolia, hardhat] as const;
