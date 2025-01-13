@@ -62,7 +62,6 @@ export const burner = ({ useSessionStorage = false, rpcUrls = {} }: BurnerConfig
       const url = rpcUrls[chain.id] || chain.rpcUrls.default.http[0];
       if (!url) throw new Error("No rpc url found for chain");
 
-      console.log("using the url ", url);
       const burnerAccount = privateKeyToAccount(loadBurnerPK({ useSessionStorage }));
       const client = createWalletClient({
         chain: chain,
