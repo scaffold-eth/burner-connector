@@ -23,9 +23,9 @@ import { burner } from "burner-connector";
 import { mainnet, base } from "viem/chains";
 
 // Configuration options:
-// - `useSessionStorage`: false (default) to persist wallet across browser tabs
+// - `useSessionStorage` (optional) : false (default) to persist wallet across browser tabs
 //                       true to create a new wallet for each browser tab
-// - `rpcUrls`: Optional custom RPC URLs for specific chain IDs
+// - `rpcUrls` (optional) : custom RPC URLs for specific chain IDs
 
 // Basic usage without options
 export const config = createConfig({
@@ -106,10 +106,10 @@ const wagmiConfig = createConfig({
 
 ### Burner Connector Options
 
-| Option              | Type                     | Default | Description                                                                                     |
-| ------------------- | ------------------------ | ------- | ----------------------------------------------------------------------------------------------- |
-| `useSessionStorage` | `boolean`                | `false` | When true, creates a new wallet for each browser tab. When false, persists wallet across tabs.  |
-| `rpcUrls`           | `Record<number, string>` | `{}`    | Optional custom RPC URLs for specific chain IDs. Falls back to chain's default if not provided. |
+| Option                         | Type                     | Default     | Description                                                                                     |
+| ------------------------------ | ------------------------ | ----------- | ----------------------------------------------------------------------------------------------- |
+| `useSessionStorage` (optional) | `boolean`                | `false`     | When true, creates a new wallet for each browser tab. When false, persists wallet across tabs.  |
+| `rpcUrls` (optional)           | `Record<number, string>` | `undefined` | Optional custom RPC URLs for specific chain IDs. Falls back to chain's default if not provided. |
 
 ---
 
