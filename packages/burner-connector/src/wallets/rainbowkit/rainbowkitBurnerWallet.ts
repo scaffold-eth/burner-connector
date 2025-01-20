@@ -1,4 +1,4 @@
-import type { Wallet } from "@rainbow-me/rainbowkit";
+import type { Wallet, WalletDetailsParams } from "@rainbow-me/rainbowkit";
 import { burnerWalletId, burnerWalletName } from "../../utils/index.js";
 import { rainbowkitBurnerConnector, rainbowkitSessionStorageBurnerConnector } from "./rainbowkitBurnerConnector.js";
 
@@ -8,6 +8,7 @@ const burnerWalletIconBase64 =
 type RainbowkitBurnerWallet = {
   (): Wallet;
   useSessionStorage?: boolean;
+  rpcUrls?: Record<number, string>;
 };
 
 /**
@@ -18,7 +19,18 @@ export const rainbowkitBurnerWallet: RainbowkitBurnerWallet = () => ({
   name: burnerWalletName,
   iconUrl: burnerWalletIconBase64,
   iconBackground: "#ffffff",
-  createConnector: rainbowkitBurnerWallet.useSessionStorage
-    ? rainbowkitSessionStorageBurnerConnector
-    : rainbowkitBurnerConnector,
+  createConnector: (params: WalletDetailsParams) => {
+    const connector = rainbowkitBurnerWallet.useSessionStorage
+      ? rainbowkitSessionStorageBurnerConnector
+      : rainbowkitBurnerConnector;
+
+    return connector(
+      {
+        ...params,
+      },
+      {
+        rpcUrls: rainbowkitBurnerWallet.rpcUrls,
+      },
+    );
+  },
 });
