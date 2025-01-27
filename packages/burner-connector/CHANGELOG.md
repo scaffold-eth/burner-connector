@@ -1,11 +1,5 @@
 # burner-connector
 
-## 0.0.10
-
-### Patch Changes
-
-- 08b7dc7: feat: allow custom rpc urls
-
 ## 0.0.9
 
 ### Patch Changes
