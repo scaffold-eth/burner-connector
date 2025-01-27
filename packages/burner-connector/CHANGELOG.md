@@ -1,5 +1,11 @@
 # burner-connector
 
+## 0.0.11
+
+### Patch Changes
+
+- 6f16a71: update version on release action
+
 ## 0.0.10
 
 ### Patch Changes
