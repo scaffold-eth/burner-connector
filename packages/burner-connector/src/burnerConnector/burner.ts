@@ -1,5 +1,12 @@
-import { createConnector, normalizeChainId, type SignTypedDataParameters } from "@wagmi/core";
-import type { EIP1193RequestFn, Hex, SendTransactionParameters, Transport, WalletRpcSchema } from "viem";
+import { createConnector, normalizeChainId } from "wagmi";
+import type {
+  EIP1193RequestFn,
+  Hex,
+  SendTransactionParameters,
+  Transport,
+  WalletRpcSchema,
+  SignTypedDataParameters,
+} from "viem";
 import {
   http,
   BaseError,

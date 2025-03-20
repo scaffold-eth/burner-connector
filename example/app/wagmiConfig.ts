@@ -1,6 +1,6 @@
 import { connectorsForWallets } from "@rainbow-me/rainbowkit";
 import { createConfig } from "wagmi";
-import { hardhat, optimismSepolia } from "wagmi/chains";
+import { hardhat, optimismSepolia } from "viem/chains";
 import { metaMaskWallet } from "@rainbow-me/rainbowkit/wallets";
 import { createClient, http } from "viem";
 import { rainbowkitBurnerWallet } from "burner-connector";
@@ -26,7 +26,7 @@ const wagmiConnectors = connectorsForWallets(
   {
     appName: "scaffold-eth-2",
     projectId: walletConnectProjectID,
-  },
+  }
 );
 
 export const chains = [optimismSepolia, hardhat] as const;
