@@ -4,7 +4,7 @@
 
 ### Patch Changes
 
-- c87d735: up wagmi, viem and rainbowkit version
+- 96e9af8: up wagmi, viem and rainbowkit version
 
 ## 0.0.11
 
