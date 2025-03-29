@@ -63,8 +63,8 @@ export const burner = ({ useSessionStorage = false, rpcUrls = {} }: BurnerConfig
       return { accounts, chainId: currentChainId };
     },
     async getProvider({ chainId } = {}) {
-      const chain = config.chains.find((x) => x.id === chainId) ?? config.chains[0];
-
+      const targetChainId = chainId || connectedChainId;
+      const chain = config.chains.find((x) => x.id === targetChainId) ?? config.chains[0];
       // Use custom RPC URL if provided, otherwise fallback to default
       const url = rpcUrls[chain.id] || chain.rpcUrls.default.http[0];
       if (!url) throw new Error("No rpc url found for chain");
