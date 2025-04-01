@@ -1,5 +1,11 @@
 # burner-connector
 
+## 0.0.13
+
+### Patch Changes
+
+- b2a63c4: check for connectedChain too while finding main chain in `getProvider`
+
 ## 0.0.12
 
 ### Patch Changes
