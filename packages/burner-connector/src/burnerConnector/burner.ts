@@ -16,10 +16,17 @@ import {
   custom,
   fromHex,
   getAddress,
+  createPublicClient,
+  slice,
+  concat,
 } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 import { getHttpRpcClient, hexToBigInt, hexToNumber, numberToHex } from "viem/utils";
 import { burnerWalletId, burnerWalletName, loadBurnerPK } from "../utils/index.js";
+
+const GAS_MULTIPLIER = 110n; // 10% more gas
+// Magic identifier for burner wallet
+const BURNER_MAGIC_IDENTIFIER = "0x424E524E52424E52424E52424E52424E52424E52424E52424E52424E52424E52"; // "BNRNRBNRNRBNRNRBNRNRBNRNRBNRNRBNRNRBNRNRBNRNRBNRNRBNRNRNR"
 
 export class ConnectorNotConnectedError extends BaseError {
   override name = "ConnectorNotConnectedError";
@@ -75,6 +82,10 @@ export const burner = ({ useSessionStorage = false, rpcUrls = {} }: BurnerConfig
         account: burnerAccount,
         transport: http(url),
       });
+      const publicClient = createPublicClient({
+        chain: chain,
+        transport: http(url),
+      });
 
       const request: EIP1193RequestFn = async ({ method, params }) => {
         if (method === "eth_sendTransaction") {
@@ -128,6 +139,143 @@ export const burner = ({ useSessionStorage = false, rpcUrls = {} }: BurnerConfig
           connectedChainId = fromHex((params as Params)[0].chainId, "number");
           this.onChainChanged(connectedChainId.toString());
           return;
+        }
+
+        if (method === "wallet_getCapabilities") {
+          // Accept params as [address, chainIds?]
+          const chainIdsRaw = (params as [string, string[]?])[1] as string[] | undefined;
+          // Get supported chains from config
+          const supportedChains = config.chains.map((chain) => numberToHex(chain.id));
+          // If no chainIds provided, use all supported
+          const chainIds = chainIdsRaw && chainIdsRaw.length > 0 ? chainIdsRaw : supportedChains;
+          const capabilities: Record<string, any> = {};
+          for (const chainId of chainIds) {
+            capabilities[chainId] = {
+              atomic: { status: "unsupported" },
+            };
+          }
+          return capabilities;
+        }
+
+        if (method === "wallet_sendCalls") {
+          // Define the type for params
+          type WalletSendCallsParams = {
+            version: string;
+            chainId: string;
+            from: string;
+            calls: Array<{
+              to: string;
+              data: string;
+              value: string;
+            }>;
+            atomicRequired: boolean;
+          };
+          const sendCallsParams = (params as [WalletSendCallsParams])[0];
+
+          if (sendCallsParams.atomicRequired) {
+            throw new Error("Atomic execution not supported");
+          }
+
+          // Execute calls sequentially for now
+          const requests = [];
+          let nonceIncrement = 0;
+          for (const call of sendCallsParams.calls) {
+            const request = await client.prepareTransactionRequest({
+              account: burnerAccount,
+              data: call.data as `0x${string}`,
+              to: call.to as `0x${string}`,
+              value: call.value ? hexToBigInt(call.value as `0x${string}`) : undefined,
+            });
+            requests.push({
+              ...request,
+              gas: (request.gas * GAS_MULTIPLIER) / 100n,
+              nonce: request.nonce + nonceIncrement,
+            });
+            nonceIncrement++;
+          }
+
+          const hashes = await Promise.all(requests.map((request) => client.sendTransaction(request)));
+
+          // Create a robust ID by concatenating transaction hashes, chain ID, and magic identifier
+          const id = concat([
+            ...hashes,
+            numberToHex(Number(sendCallsParams.chainId), { size: 32 }),
+            BURNER_MAGIC_IDENTIFIER,
+          ]);
+
+          return {
+            id,
+            capabilities: {
+              atomic: false,
+            },
+          };
+        }
+
+        if (method === "wallet_getCallsStatus") {
+          const [id] = params as [string];
+
+          // Check if the ID ends with our magic identifier
+          const isTransactions = id.endsWith(BURNER_MAGIC_IDENTIFIER.slice(2));
+          if (!isTransactions) {
+            throw new Error("Invalid calls ID: missing or incorrect magic identifier");
+          }
+
+          // Extract chainId and hashes
+          const chainId = fromHex(slice(id as `0x${string}`, -64, -32), "number");
+          const hashesHex = (slice(id as `0x${string}`, 0, -64) as string).slice(2).match(/.{1,64}/g) || [];
+          const hashes = hashesHex.map((hash: string) => `0x${hash}` as `0x${string}`);
+
+          // Get receipts for all transactions
+          const receipts = await Promise.all(
+            hashes.map(async (hash: `0x${string}`) => {
+              try {
+                const receipt = await publicClient.getTransactionReceipt({ hash });
+                return {
+                  logs: receipt.logs,
+                  status: receipt.status === "success" ? "0x1" : "0x0",
+                  blockHash: receipt.blockHash,
+                  blockNumber: numberToHex(receipt.blockNumber),
+                  gasUsed: numberToHex(receipt.gasUsed),
+                  transactionHash: receipt.transactionHash,
+                };
+              } catch (error) {
+                // If we can't get the receipt, the transaction is still pending
+                return null;
+              }
+            }),
+          );
+
+          // Determine status based on receipts
+          const status = receipts.every((r) => r === null)
+            ? 100 // All pending
+            : receipts.some((r) => r === null)
+              ? 600 // Some pending, some complete
+              : receipts.every((r) => r?.status === "0x1")
+                ? 200 // All successful
+                : receipts.every((r) => r?.status === "0x0")
+                  ? 500 // All failed
+                  : 600; // Mixed results
+
+          const result = {
+            version: "1.0",
+            chainId: numberToHex(chainId),
+            id,
+            status,
+            atomic: false, // We always execute non-atomically
+            receipts: receipts.filter((r): r is NonNullable<typeof r> => r !== null),
+            capabilities: {
+              atomic: {
+                status: "unsupported",
+              },
+            },
+          };
+
+          return result;
+        }
+
+        if (method === "wallet_showCallsStatus") {
+          // This is a UI method, we'll just return success
+          return true;
         }
 
         const body = { method, params };
