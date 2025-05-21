@@ -1,6 +1,6 @@
 {
   "name": "burner-connector",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "description": "",
   "packageManager": "pnpm@9.0.6",
   "type": "module",
