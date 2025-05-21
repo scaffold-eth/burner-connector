@@ -53,7 +53,7 @@ export const Example = () => {
                 message: "hello",
               });
               console.log("Signature is :", signature);
-              toast.success("Message Signed");
+              toast.success("Message Signed, check console");
             } catch (err) {
               console.log(err, "err");
               toast.error("Error Signing Message");
