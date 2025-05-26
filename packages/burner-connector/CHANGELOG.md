@@ -1,5 +1,11 @@
 # burner-connector
 
+## 0.0.15
+
+### Patch Changes
+
+- cdb0adb: feat: EIP-5792 with sequential calls
+
 ## 0.0.14
 
 ### Patch Changes
