@@ -206,7 +206,7 @@ export const burner = ({ useSessionStorage = false, rpcUrls = {} }: BurnerConfig
           return {
             id,
             capabilities: {
-              atomic: false,
+              atomic: sendCallsParams.calls.length === 1,
             },
           };
         }
