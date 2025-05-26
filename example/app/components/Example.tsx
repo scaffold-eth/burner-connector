@@ -2,15 +2,14 @@ import {
   useAccount,
   useReadContract,
   useSignMessage,
-  useCallsStatus,
   useWriteContract,
 } from "wagmi";
 import { FaucetButton } from "./FaucetButton";
+import { SendCalls } from "./SendCalls";
 import toast from "react-hot-toast";
 import deployedContracts from "../contracts/deployedContracts";
 import { optimismSepolia } from "viem/chains";
-import { useSendCalls, useCapabilities } from "wagmi";
-import { encodeFunctionData } from "viem";
+import { useCapabilities } from "wagmi";
 import React, { useState } from "react";
 
 export const Example = () => {
@@ -18,17 +17,6 @@ export const Example = () => {
   const { signMessageAsync } = useSignMessage();
   const { data: capabilities } = useCapabilities();
   const { writeContractAsync, isPending } = useWriteContract();
-  const {
-    sendCallsAsync,
-    isPending: isSendingCalls,
-    data: callsData,
-  } = useSendCalls();
-  const { data: callsStatus, refetch: refetchCallsStatus } = useCallsStatus({
-    id: callsData?.id ?? "",
-    query: {
-      enabled: !!callsData?.id,
-    },
-  });
   const yourContract =
     chain?.id && chain.id in deployedContracts
       ? deployedContracts[chain.id as keyof typeof deployedContracts]
@@ -57,33 +45,6 @@ export const Example = () => {
     } catch (err) {
       setGreetingStatus("Error");
       setGreetingTxHash(null);
-    }
-  };
-
-  const handleSendCalls = async () => {
-    try {
-      const firstData = encodeFunctionData({
-        abi: yourContract.abi,
-        functionName: "setGreeting",
-        args: ["Hello once"],
-      });
-      const secondData = encodeFunctionData({
-        abi: yourContract.abi,
-        functionName: "setGreeting",
-        args: ["Hello twice"],
-      });
-      const result = await sendCallsAsync({
-        calls: [
-          { to: yourContract.address, data: firstData },
-          { to: yourContract.address, data: secondData },
-        ],
-      });
-      console.log("result", result);
-      toast.success("Calls sent");
-      refetchTotalCounter();
-    } catch (err) {
-      console.log(err, "err");
-      toast.error("Error Sending Calls");
     }
   };
 
@@ -137,42 +98,7 @@ export const Example = () => {
       </div>
 
       {/* Send Multiple Greetings Section */}
-      <div>
-        <h2 className="font-bold mb-2">Send Calls</h2>
-        <button
-          className="h-8 px-4 text-sm text-indigo-100 transition-colors duration-150 bg-indigo-700 rounded-lg focus:shadow-outline hover:bg-indigo-800"
-          disabled={isSendingCalls}
-          onClick={handleSendCalls}
-        >
-          {isSendingCalls ? "Sending..." : "Send multiple greetings"}
-        </button>
-        {callsData?.id && (
-          <button
-            className="ml-2 h-8 px-4 text-xs text-indigo-700 border border-indigo-700 rounded-lg hover:bg-indigo-100"
-            onClick={() => refetchCallsStatus()}
-          >
-            Refetch Calls Status
-          </button>
-        )}
-        {callsData?.id && <p>Call ID: {callsData.id}</p>}
-        {callsStatus && (
-          <>
-            <p>Status: {callsStatus.status}</p>
-            {callsStatus.receipts && callsStatus.receipts.length > 0 && (
-              <div>
-                <p>Receipt IDs:</p>
-                <ul className="ml-4 list-disc">
-                  {callsStatus.receipts.map((r: any, i: number) => (
-                    <li key={i} className="break-all">
-                      {r.transactionHash}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-          </>
-        )}
-      </div>
+      <SendCalls onSuccess={() => refetchTotalCounter()} />
 
       {/* Total Counter Section */}
       <div>
