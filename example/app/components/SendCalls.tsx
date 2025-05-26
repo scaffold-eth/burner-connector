@@ -18,7 +18,11 @@ export const SendCalls = ({ onSuccess }: SendCallsProps) => {
     data: callsData,
   } = useSendCalls();
 
-  const { data: callsStatus, refetch: refetchCallsStatus } = useCallsStatus({
+  const {
+    data: callsStatus,
+    refetch: refetchCallsStatus,
+    isFetching: isFetchingCallsStatus,
+  } = useCallsStatus({
     id: callsData?.id ?? "",
     query: {
       enabled: !!callsData?.id,
@@ -73,7 +77,7 @@ export const SendCalls = ({ onSuccess }: SendCallsProps) => {
           className="ml-2 h-8 px-4 text-xs text-indigo-700 border border-indigo-700 rounded-lg hover:bg-indigo-100"
           onClick={() => refetchCallsStatus()}
         >
-          Refetch Calls Status
+          {isFetchingCallsStatus ? "Loading..." : "Refetch Calls Status"}
         </button>
       )}
       {callsData?.id && (

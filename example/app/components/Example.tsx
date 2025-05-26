@@ -23,7 +23,11 @@ export const Example = () => {
           .YourContract
       : deployedContracts[optimismSepolia.id].YourContract;
 
-  const { data: totalCounter, refetch: refetchTotalCounter } = useReadContract({
+  const {
+    data: totalCounter,
+    refetch: refetchTotalCounter,
+    isFetching: isFetchingTotalCounter,
+  } = useReadContract({
     ...yourContract,
     functionName: "totalCounter",
   });
@@ -105,9 +109,10 @@ export const Example = () => {
         <h2 className="font-bold mb-2">Total Counter</h2>
         <button
           className="mb-2 h-8 px-4 text-xs text-indigo-700 border border-indigo-700 rounded-lg hover:bg-indigo-100"
+          disabled={isFetchingTotalCounter}
           onClick={() => refetchTotalCounter()}
         >
-          Refetch Total Counter
+          {isFetchingTotalCounter ? "Loading..." : "Refetch Total Counter"}
         </button>
         <p>Reading total count: {totalCounter ? totalCounter.toString() : 0}</p>
       </div>
