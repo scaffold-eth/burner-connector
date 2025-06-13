@@ -1,5 +1,11 @@
 # burner-connector
 
+## 0.0.16
+
+### Patch Changes
+
+- 330616c: up wagmi, viem and @rainbow-me/rainbowkit version
+
 ## 0.0.15
 
 ### Patch Changes
