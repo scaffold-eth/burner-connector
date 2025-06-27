@@ -192,7 +192,7 @@ export const burner = ({ useSessionStorage = false, rpcUrls = {} }: BurnerConfig
               nonce: request.nonce + nonceIncrement,
             });
             hashes.push(hash);
-            const receipt = await publicClient.getTransactionReceipt({ hash });
+            const receipt = await publicClient.waitForTransactionReceipt({ hash });
             if (receipt.status !== "success") {
               break;
             }
