@@ -178,7 +178,6 @@ export const burner = ({ useSessionStorage = false, rpcUrls = {} }: BurnerConfig
 
           // Execute calls sequentially for now
           const hashes: `0x${string}`[] = [];
-          let nonceIncrement = 0;
           for (const call of sendCallsParams.calls) {
             const request = await client.prepareTransactionRequest({
               account: burnerAccount,
@@ -189,14 +188,12 @@ export const burner = ({ useSessionStorage = false, rpcUrls = {} }: BurnerConfig
             const hash = await client.sendTransaction({
               ...request,
               gas: (request.gas * GAS_MULTIPLIER) / 100n,
-              nonce: request.nonce + nonceIncrement,
             });
             hashes.push(hash);
             const receipt = await publicClient.waitForTransactionReceipt({ hash });
             if (receipt.status !== "success") {
               break;
             }
-            nonceIncrement++;
           }
 
           // Create a robust ID by concatenating transaction hashes, chain ID, and magic identifier
