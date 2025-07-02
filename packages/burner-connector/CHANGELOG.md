@@ -1,5 +1,11 @@
 # burner-connector
 
+## 0.0.17
+
+### Patch Changes
+
+- 4e27f94: 5792: Make calls sequentially to enable gas estimation for dependent calls
+
 ## 0.0.16
 
 ### Patch Changes
