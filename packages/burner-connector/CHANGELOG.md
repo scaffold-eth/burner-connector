@@ -1,5 +1,11 @@
 # burner-connector
 
+## 0.0.18
+
+### Patch Changes
+
+- 96b68e8: up wagmi, viem and rainbowkit version
+
 ## 0.0.17
 
 ### Patch Changes
