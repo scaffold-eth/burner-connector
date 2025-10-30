@@ -45,8 +45,8 @@
     "typescript-eslint": "^7.7.1"
   },
   "dependencies": {
-    "@rainbow-me/rainbowkit": "2.2.8",
-    "viem": "2.34.0",
-    "wagmi": "2.16.4"
+    "@rainbow-me/rainbowkit": "2.2.9",
+    "viem": "2.38.5",
+    "wagmi": "2.19.1"
   }
 }
