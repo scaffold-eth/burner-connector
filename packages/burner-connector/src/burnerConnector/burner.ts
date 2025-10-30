@@ -56,7 +56,7 @@ export const burner = ({ useSessionStorage = false, rpcUrls = {} }: BurnerConfig
     id: burnerWalletId,
     name: burnerWalletName,
     type: burnerWalletId,
-    async connect({ chainId } = {}) {
+    async connect({ chainId, withCapabilities } = {}) {
       const provider = await this.getProvider();
       const accounts = await provider.request({
         method: "eth_accounts",
@@ -67,7 +67,10 @@ export const burner = ({ useSessionStorage = false, rpcUrls = {} }: BurnerConfig
         currentChainId = chain.id;
       }
       connected = true;
-      return { accounts, chainId: currentChainId };
+      return {
+        accounts: (withCapabilities ? accounts.map((address) => ({ address, capabilities: {} })) : accounts) as never,
+        chainId: currentChainId,
+      };
     },
     async getProvider({ chainId } = {}) {
       const targetChainId = chainId || connectedChainId;
