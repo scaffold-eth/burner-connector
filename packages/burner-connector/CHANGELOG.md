@@ -1,5 +1,11 @@
 # burner-connector
 
+## 0.0.19
+
+### Patch Changes
+
+- ac3610e: Bump wagmi, viem and @rainbow-me/rainbowkit
+
 ## 0.0.18
 
 ### Patch Changes
