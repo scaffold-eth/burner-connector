@@ -1,4 +1,4 @@
-import { createConnector, normalizeChainId } from "wagmi";
+import { createConnector } from "wagmi";
 import type {
   EIP1193RequestFn,
   Hex,
@@ -19,6 +19,7 @@ import {
   createPublicClient,
   slice,
   concat,
+  normalizeChainId,
 } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 import { getHttpRpcClient, hexToBigInt, hexToNumber, numberToHex } from "viem/utils";
