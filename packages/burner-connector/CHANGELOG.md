@@ -1,5 +1,11 @@
 # burner-connector
 
+## 0.0.20
+
+### Patch Changes
+
+- 13a2dcc: up wagmi viem
+
 ## 0.0.19
 
 ### Patch Changes
