@@ -1,6 +1,10 @@
 {
   "private": true,
   "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/scaffold-eth/burner-connector.git"
+  },
   "scripts": {
     "build": "pnpm --filter burner-connector build",
     "build:esm+types": "pnpm --filter burner-connector build:esm+types",
