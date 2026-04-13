@@ -1,4 +1,4 @@
-import { createConnector, normalizeChainId } from "wagmi";
+import { createConnector, normalizeChainId, type Config } from "wagmi";
 import type {
   EIP1193RequestFn,
   Hex,
@@ -10,7 +10,6 @@ import type {
 import {
   http,
   BaseError,
-  RpcRequestError,
   SwitchChainError,
   createWalletClient,
   custom,
@@ -21,7 +20,7 @@ import {
   concat,
 } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
-import { getHttpRpcClient, hexToBigInt, hexToNumber, numberToHex } from "viem/utils";
+import { hexToBigInt, hexToNumber, numberToHex } from "viem/utils";
 import { burnerWalletId, burnerWalletName, loadBurnerPK } from "../utils/index.js";
 
 const GAS_MULTIPLIER = 110n; // 10% more gas
@@ -75,22 +74,24 @@ export const burner = ({ useSessionStorage = false, rpcUrls = {} }: BurnerConfig
     async getProvider({ chainId } = {}) {
       const targetChainId = chainId || connectedChainId;
       const chain = config.chains.find((x) => x.id === targetChainId) ?? config.chains[0];
-      // Use custom RPC URL if provided, otherwise fallback to default
-      const url = rpcUrls[chain.id] || chain.rpcUrls.default.http[0];
-      if (!url) throw new Error("No rpc url found for chain");
+
+      // Explicit override wins; otherwise inherit the parent wagmi config's transport
+      const overrideUrl = rpcUrls[chain.id];
+      const parentClient = overrideUrl ? undefined : (config as unknown as Config).getClient({ chainId: chain.id });
+      const transport: Transport = overrideUrl ? http(overrideUrl) : custom({ request: parentClient!.request });
 
       const burnerAccount = privateKeyToAccount(loadBurnerPK({ useSessionStorage }));
       const client = createWalletClient({
         chain: chain,
         account: burnerAccount,
-        transport: http(url),
+        transport,
       });
       const publicClient = createPublicClient({
         chain: chain,
-        transport: http(url),
+        transport,
       });
 
-      const request: EIP1193RequestFn = async ({ method, params }) => {
+      const request = (async ({ method, params }) => {
         if (method === "eth_sendTransaction") {
           const actualParams = (params as SendTransactionParameters[])[0];
           const hash = await client.sendTransaction({
@@ -281,13 +282,9 @@ export const burner = ({ useSessionStorage = false, rpcUrls = {} }: BurnerConfig
           return true;
         }
 
-        const body = { method, params };
-        const httpClient = getHttpRpcClient(url);
-        const { error, result } = await httpClient.request({ body });
-        if (error) throw new RpcRequestError({ body, error, url });
-
+        const result: unknown = await publicClient.request({ method, params } as never);
         return result;
-      };
+      }) as EIP1193RequestFn;
 
       return custom({ request })({ retryCount: 0 });
     },
