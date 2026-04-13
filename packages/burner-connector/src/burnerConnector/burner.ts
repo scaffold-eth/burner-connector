@@ -1,4 +1,4 @@
-import { createConnector, normalizeChainId, type Config } from "wagmi";
+import { createConnector, normalizeChainId } from "wagmi";
 import type {
   EIP1193RequestFn,
   Hex,
@@ -26,6 +26,14 @@ import { burnerWalletId, burnerWalletName, loadBurnerPK } from "../utils/index.j
 const GAS_MULTIPLIER = 110n; // 10% more gas
 // Magic identifier for burner wallet
 const BURNER_MAGIC_IDENTIFIER = "0x424E524E52424E52424E52424E52424E52424E52424E52424E52424E52424E52"; // "BNRNRBNRNRBNRNRBNRNRBNRNRBNRNRBNRNRBNRNRBNRNRBNRNRBNRNRNR"
+
+// Chains where viem's chain.rpcUrls.default has known CORS or rate-limit issues
+// in production. Mainnet's default is eth.merkle.io which blocks cross-origin
+// requests from Vercel / most hosts. Override here so the out-of-the-box burner
+// works on live domains.
+const SAFE_DEFAULT_RPC_BY_CHAIN: Record<number, string> = {
+  1: "https://mainnet.rpc.buidlguidl.com",
+};
 
 export class ConnectorNotConnectedError extends BaseError {
   override name = "ConnectorNotConnectedError";
@@ -75,10 +83,25 @@ export const burner = ({ useSessionStorage = false, rpcUrls = {} }: BurnerConfig
       const targetChainId = chainId || connectedChainId;
       const chain = config.chains.find((x) => x.id === targetChainId) ?? config.chains[0];
 
-      // Explicit override wins; otherwise inherit the parent wagmi config's transport
+      // Resolution order:
+      //   1. Explicit `rpcUrls` passed to the burner.
+      //   2. The consumer's `transports[chainId]` from createConfig — this preserves
+      //      fallback chains, Alchemy keys, etc. Only populated when the consumer
+      //      used the `transports: {}` form, not the `client()` factory.
+      //   3. Curated safer default for chains where viem's default is broken in prod.
+      //   4. viem's chain default (existing behavior).
       const overrideUrl = rpcUrls[chain.id];
-      const parentClient = overrideUrl ? undefined : (config as unknown as Config).getClient({ chainId: chain.id });
-      const transport: Transport = overrideUrl ? http(overrideUrl) : custom({ request: parentClient!.request });
+      const consumerTransport = !overrideUrl ? config.transports?.[chain.id] : undefined;
+      const fallbackUrl = SAFE_DEFAULT_RPC_BY_CHAIN[chain.id] ?? chain.rpcUrls.default.http[0];
+      const transport: Transport = overrideUrl
+        ? http(overrideUrl)
+        : consumerTransport
+          ? consumerTransport
+          : http(fallbackUrl);
+
+      if (!overrideUrl && !consumerTransport && !fallbackUrl) {
+        throw new Error("No rpc url found for chain");
+      }
 
       const burnerAccount = privateKeyToAccount(loadBurnerPK({ useSessionStorage }));
       const client = createWalletClient({
