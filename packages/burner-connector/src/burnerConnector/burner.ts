@@ -10,7 +10,6 @@ import type {
 import {
   http,
   BaseError,
-  RpcRequestError,
   SwitchChainError,
   createWalletClient,
   custom,
@@ -21,12 +20,20 @@ import {
   concat,
 } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
-import { getHttpRpcClient, hexToBigInt, hexToNumber, numberToHex } from "viem/utils";
+import { hexToBigInt, hexToNumber, numberToHex } from "viem/utils";
 import { burnerWalletId, burnerWalletName, loadBurnerPK } from "../utils/index.js";
 
 const GAS_MULTIPLIER = 110n; // 10% more gas
 // Magic identifier for burner wallet
 const BURNER_MAGIC_IDENTIFIER = "0x424E524E52424E52424E52424E52424E52424E52424E52424E52424E52424E52"; // "BNRNRBNRNRBNRNRBNRNRBNRNRBNRNRBNRNRBNRNRBNRNRBNRNRBNRNRNR"
+
+// Chains where viem's chain.rpcUrls.default has known CORS or rate-limit issues
+// in production. Mainnet's default is eth.merkle.io which blocks cross-origin
+// requests from Vercel / most hosts. Override here so the out-of-the-box burner
+// works on live domains.
+const SAFE_DEFAULT_RPC_BY_CHAIN: Record<number, string> = {
+  1: "https://mainnet.rpc.buidlguidl.com",
+};
 
 export class ConnectorNotConnectedError extends BaseError {
   override name = "ConnectorNotConnectedError";
@@ -75,22 +82,39 @@ export const burner = ({ useSessionStorage = false, rpcUrls = {} }: BurnerConfig
     async getProvider({ chainId } = {}) {
       const targetChainId = chainId || connectedChainId;
       const chain = config.chains.find((x) => x.id === targetChainId) ?? config.chains[0];
-      // Use custom RPC URL if provided, otherwise fallback to default
-      const url = rpcUrls[chain.id] || chain.rpcUrls.default.http[0];
-      if (!url) throw new Error("No rpc url found for chain");
+
+      // Resolution order:
+      //   1. Explicit `rpcUrls` passed to the burner.
+      //   2. The consumer's `transports[chainId]` from createConfig — this preserves
+      //      fallback chains, Alchemy keys, etc. Only populated when the consumer
+      //      used the `transports: {}` form, not the `client()` factory.
+      //   3. Curated safer default for chains where viem's default is broken in prod.
+      //   4. viem's chain default (existing behavior).
+      const overrideUrl = rpcUrls[chain.id];
+      const consumerTransport = !overrideUrl ? config.transports?.[chain.id] : undefined;
+      const fallbackUrl = SAFE_DEFAULT_RPC_BY_CHAIN[chain.id] ?? chain.rpcUrls.default.http[0];
+      const transport: Transport = overrideUrl
+        ? http(overrideUrl)
+        : consumerTransport
+          ? consumerTransport
+          : http(fallbackUrl);
+
+      if (!overrideUrl && !consumerTransport && !fallbackUrl) {
+        throw new Error("No rpc url found for chain");
+      }
 
       const burnerAccount = privateKeyToAccount(loadBurnerPK({ useSessionStorage }));
       const client = createWalletClient({
         chain: chain,
         account: burnerAccount,
-        transport: http(url),
+        transport,
       });
       const publicClient = createPublicClient({
         chain: chain,
-        transport: http(url),
+        transport,
       });
 
-      const request: EIP1193RequestFn = async ({ method, params }) => {
+      const request = (async ({ method, params }) => {
         if (method === "eth_sendTransaction") {
           const actualParams = (params as SendTransactionParameters[])[0];
           const hash = await client.sendTransaction({
@@ -281,13 +305,9 @@ export const burner = ({ useSessionStorage = false, rpcUrls = {} }: BurnerConfig
           return true;
         }
 
-        const body = { method, params };
-        const httpClient = getHttpRpcClient(url);
-        const { error, result } = await httpClient.request({ body });
-        if (error) throw new RpcRequestError({ body, error, url });
-
+        const result: unknown = await publicClient.request({ method, params } as never);
         return result;
-      };
+      }) as EIP1193RequestFn;
 
       return custom({ request })({ retryCount: 0 });
     },
