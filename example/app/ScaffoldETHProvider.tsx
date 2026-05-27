@@ -1,14 +1,30 @@
 "use client";
 
-import dynamic from "next/dynamic";
+import { RainbowKitProvider } from "@rainbow-me/rainbowkit";
+import { WagmiProvider } from "wagmi";
+import { Toaster } from "react-hot-toast";
+import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
+import { wagmiConfig } from "./wagmiConfig";
 
-// `ssr: false` avoids running WalletConnect's connector setup on the server,
-// which throws `ReferenceError: indexedDB is not defined` from idb-keyval
-// during `createConfig` → `connector.setup()`.
-export const ScaffoldEthAppWithProviders = dynamic(
-  () =>
-    import("./ScaffoldETHProviderInner").then(
-      (m) => m.ScaffoldEthAppWithProviders,
-    ),
-  { ssr: false },
-);
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+    },
+  },
+});
+
+export const ScaffoldEthAppWithProviders = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
+  return (
+    <WagmiProvider config={wagmiConfig}>
+      <QueryClientProvider client={queryClient}>
+        <RainbowKitProvider>{children}</RainbowKitProvider>
+      </QueryClientProvider>
+      <Toaster />
+    </WagmiProvider>
+  );
+};
