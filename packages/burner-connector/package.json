@@ -39,14 +39,14 @@
     "@eslint/js": "^9.39.0",
     "eslint": "^9.39.0",
     "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-prettier": "^5.5.5",
+    "eslint-plugin-prettier": "^5.5.6",
     "prettier": "3.8.3",
-    "typescript": "^5.4.5",
-    "typescript-eslint": "^8.59.1"
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.60.1"
   },
   "dependencies": {
-    "@rainbow-me/rainbowkit": "2.2.10",
-    "viem": "2.48.4",
-    "wagmi": "2.19.5"
+    "@rainbow-me/rainbowkit": "2.2.11",
+    "viem": "2.52.0",
+    "wagmi": "3.6.16"
   }
 }
