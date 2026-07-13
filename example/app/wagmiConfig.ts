@@ -19,15 +19,11 @@ import { rainbowkitBurnerWallet } from "burner-connector";
 const wallets = [metaMaskWallet, walletConnectWallet, rainbowkitBurnerWallet];
 const walletConnectProjectID = "3a8170812b534d0ff9d794f19a901d64";
 
-// Only build connectors on the client. WalletConnect touches `indexedDB`
-// during connector setup which crashes Node SSR.
-const wagmiConnectors = () => {
-  if (typeof window === "undefined") return [];
-  return connectorsForWallets(
+const wagmiConnectors = () =>
+  connectorsForWallets(
     [{ groupName: "Supported Wallets", wallets }],
     { appName: "scaffold-eth-2", projectId: walletConnectProjectID },
   );
-};
 
 export const chains = [optimismSepolia, hardhat] as const;
 
