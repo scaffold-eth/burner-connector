@@ -1,4 +1,4 @@
-import { createConnector, normalizeChainId } from "wagmi";
+import { createConnector } from "wagmi";
 import type {
   EIP1193RequestFn,
   Hex,
@@ -292,7 +292,7 @@ export const burner = ({ useSessionStorage = false, rpcUrls = {} }: BurnerConfig
       return custom({ request })({ retryCount: 0 });
     },
     onChainChanged(chain) {
-      const chainId = normalizeChainId(chain);
+      const chainId = Number(chain);
       config.emitter.emit("change", { chainId });
     },
     async getAccounts() {
