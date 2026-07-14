@@ -1,5 +1,11 @@
 # burner-connector
 
+## 0.0.21
+
+### Patch Changes
+
+- 7388441: Bump dependencies, update pnpm, add minimumReleaseAge
+
 ## 0.0.20
 
 ### Patch Changes
