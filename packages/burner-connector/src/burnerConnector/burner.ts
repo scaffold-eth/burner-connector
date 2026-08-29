@@ -248,16 +248,17 @@ export const burner = ({ useSessionStorage = false, rpcUrls = {} }: BurnerConfig
             }),
           );
 
-          // Determine status based on receipts
-          const status = receipts.every((r) => r === null)
-            ? 100 // All pending
-            : receipts.some((r) => r === null)
-              ? 600 // Some pending, some complete
+          // Determine status based on receipts. A missing receipt means the transaction is
+          // not on chain yet, which EIP-5792 calls pending (100); 600 is reserved for a
+          // batch that actually reverted in part, so it must not stand in for "still waiting".
+          const status =
+            receipts.length === 0 || receipts.some((r) => r === null)
+              ? 100 // Not yet included onchain
               : receipts.every((r) => r?.status === "0x1")
                 ? 200 // All successful
                 : receipts.every((r) => r?.status === "0x0")
                   ? 500 // All failed
-                  : 600; // Mixed results
+                  : 600; // Partially reverted
 
           const result = {
             version: "1.0",
