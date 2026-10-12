@@ -1,5 +1,11 @@
 # burner-connector
 
+## 0.0.22
+
+### Patch Changes
+
+- 26b172b: Bump viem to 2.57.x
+
 ## 0.0.21
 
 ### Patch Changes
