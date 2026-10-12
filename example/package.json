@@ -16,7 +16,7 @@
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
     "react-hot-toast": "^2.4.1",
-    "viem": "2.53.1",
+    "viem": "2.57.3",
     "wagmi": "2.19.5"
   },
   "devDependencies": {
