@@ -24,6 +24,12 @@ or
 pnpm add burner-connector
 ```
 
+`viem`, `wagmi` and `@rainbow-me/rainbowkit` are peer dependencies, so `burner-connector` uses the versions your app already installs. Add them if your project doesn't have them yet (Scaffold-ETH 2 and create-eth projects already do):
+
+```bash
+pnpm add viem wagmi @rainbow-me/rainbowkit
+```
+
 2. Using wagmi `burner` connector:
 
 ```ts
